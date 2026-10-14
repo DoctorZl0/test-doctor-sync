@@ -1,14 +1,23 @@
-# Test Doctor orders synchronizer
+# Мини-синхронизатор заявок
 
-Small Python service that fetches raw orders, normalizes Russian phone numbers,
-merges duplicates by maximum amount and latest creation date, and returns the
-required JSON response at `/api/orders`.
+Небольшой сервис на Python для обработки заявок из рекламной формы.
+Он получает исходные заявки, приводит телефоны к формату `+7XXXXXXXXXX`,
+отбрасывает некорректные номера и объединяет дубли по телефону.
 
-## Run
+Правило выбора при дублях: сначала максимальная сумма заявки, а при равной
+сумме — более поздняя дата создания.
+
+## Возможности
+
+- `/api/orders` — JSON для автоматической проверки;
+- `/` — удобная веб-панель со статистикой и таблицей клиентов;
+- повторные запросы идемпотентны и не создают новые дубли.
+
+## Запуск
 
 ```bash
 python3 server.py
 python3 -m unittest -v test_sync_service.py
 ```
 
-The upstream URL is configured in `sync_service.py`.
+Адрес исходного API задаётся в файле `sync_service.py`.
